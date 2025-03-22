@@ -8,7 +8,7 @@ export function login() {
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             alert("Login successful!");
-            window.location.href = "dashboard.html";  // Redirect to dashboard
+            window.location.href = "index.html";  // Redirect to dashboard
         })
         .catch((error) => {
             alert(error.message);
