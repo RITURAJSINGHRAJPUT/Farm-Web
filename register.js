@@ -11,7 +11,7 @@ export function register() {
         .then((userCredential) => {
             console.log("User Registered:", userCredential.user);
             alert("Registration successful!");
-            window.location.href = "login.html"; // Redirect to login
+            window.location.href = "index.html"; // Redirect to login
         })
         .catch((error) => {
             console.error("Error:", error.message);

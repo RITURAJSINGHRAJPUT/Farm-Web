@@ -3,18 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Login - Farm Web</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h2>Welcome to the Dashboard</h2>
-        <button class="btn" onclick="logout()">Logout</button>
+    <div class="auth-container">
+        <div class="auth-box">
+            <img src="assets/logo.png" class="logo" alt="Farm Logo">
+            <h2>Login</h2>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button class="btn" onclick="login()">Login</button>
+            <p class="toggle"><a href="register.html">Don't have an account? Register</a></p>
+        </div>
     </div>
 
     <script type="module">
-        import { logout } from "./index.js";
-        window.logout = logout;
+        import { login } from "./index.js";
+        window.login = login;
     </script>
 </body>
 </html>
