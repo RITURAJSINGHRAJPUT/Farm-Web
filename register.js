@@ -1,5 +1,7 @@
-import { auth } from "./firebase-config.js";
-import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { app } from "./firebase-config.js"; // Correct import
+
+const auth = getAuth(app);
 
 export function register() {
     const email = document.getElementById("email").value;
@@ -7,9 +9,12 @@ export function register() {
 
     createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            alert("Registration successful! You can now log in.");
-            window.location.href = "login.html";  // Redirect to login
+            console.log("User Registered:", userCredential.user);
+            alert("Registration successful!");
+            window.location.href = "login.html"; // Redirect to login
         })
         .catch((error) => {
+            console.error("Error:", error.message);
             alert(error.message);
         });
+}
