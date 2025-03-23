@@ -3,18 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Agriculture Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
-    <div class="container">
-        <h2>Welcome to the Dashboard</h2>
-        <button class="btn" onclick="logout()">Logout</button>
+<body style="font-family: 'Poppins', sans-serif; background: #f4f4f4; text-align: center;">
+
+    <nav style="display: flex; justify-content: space-between; align-items: center; background: #2d7b5f; padding: 15px 20px; color: white;">
+        <h1>Smart Agriculture Dashboard</h1>
+        <button onclick="logout()" style="background: red; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Logout</button>
+    </nav>
+
+    <div style="padding: 20px;">
+        <h2>Agriculture Dashboard</h2>
+
+        <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 20px;">
+            <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); width: 200px;">
+                <h3>Temperature:</h3>
+                <p id="temperature">-- °C</p>
+            </div>
+            <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); width: 200px;">
+                <h3>Humidity:</h3>
+                <p id="humidity">-- %</p>
+            </div>
+            <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); width: 200px;">
+                <h3>Soil Moisture:</h3>
+                <p id="soil-moisture">-- %</p>
+            </div>
+        </div>
     </div>
 
-    <script type="module">
-        import { logout } from "./dashboard.js";
-        window.logout = logout;
-    </script>
+    <script type="module" src="dashboard.js"></script>
 </body>
 </html>
