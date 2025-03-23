@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Precision Farming</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #ffffff;">
+    <h2 style="background: #2d6a4f; color: white; padding: 15px; text-align: center; margin: 0;">🌾 IoT Precision
+        Farming Dashboard 🌦️</h2>
+
+    <div style="display: flex; width: 90%; max-width: 1200px; margin: 20px auto;">
+        <div
+            style="flex: 1; padding: 20px; background: white; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);">
+            <div style="text-align: center;">
+                <select id="location" style="padding: 12px; font-size: 16px; border-radius: 5px;">
+                    <option value="Surat,IN">Surat</option>
+                    <option value="Ayodhya,IN">Ayodhya</option>
+                    <option value="Ahmedabad,IN">Ahmedabad</option>
+                    <option value="Pune,IN">Pune</option>
+                    <option value="Kerala,IN">Kerala</option>
+                    <option value="Varanasi,IN">Varanasi</option>
+                </select>
+                <button onclick="fetchWeather()"
+                    style="padding: 12px; font-size: 16px; border-radius: 5px; background: #40916c; color: white; border: none; cursor: pointer;">🌍
+                    Get Data</button>
+            </div>
+
+            <h2 style="text-align: center;">7-Day Weather Forecast</h2>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th style="background-color: #40916c; color: white; padding: 10px; border: 1px solid #ddd;">Date
+                        </th>
+                        <th style="background-color: #40916c; color: white; padding: 10px; border: 1px solid #ddd;">🌡️
+                            Temp (°C)</th>
+                        <th style="background-color: #40916c; color: white; padding: 10px; border: 1px solid #ddd;">💧
+                            Humidity (%)</th>
+                        <th style="background-color: #40916c; color: white; padding: 10px; border: 1px solid #ddd;">🌥️
+                            Weather</th>
+                    </tr>
+                </thead>
+                <tbody id="weather-forecast">
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 10px; border: 1px solid #ddd;">Select a
+                            location and click "Get Data"</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="flex: 1; margin-left: 20px;">
+            <div id="map" style="height: 500px; width: 100%; border-radius: 10px;"></div>
+        </div>
+    </div>
+
+    <div style="width: 100%; max-width: 1165px; margin: 20px auto; padding: 15px; text-align: center; 
+                    background: #d8f3dc; border-left: 5px solid #40916c; border-radius: 10px;
+                    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+        <h3 style="color: #2d6a4f; margin: 0;">🤖 ML-Based Irrigation System</h3>
+        <p style="color: #1b4332; font-size: 16px; margin: 10px 0;">Smart AI-driven irrigation scheduling is coming soon!
+            Stay tuned for updates.</p>
+                <a href="javascript:void(0);" onclick="goBack()"
+                    style="display: block; margin: 20px auto; padding: 12px 20px; font-size: 16px; background: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer; text-align: center; width: 200px; text-decoration: none;">⬅️
+                    Back to Previous Page</a>
+    </div>
+
+
+
+
+    <footer style="background: #2d6a4f; color: white; padding: 10px; text-align: center; margin-top: 20px;">
+        © 2025 IoT Precision Farming. All rights reserved.
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        const apiKey = 'bc9015c1a2a3bc0e8e8300dc52001234';
+        let map;
+
+        async function fetchWeather() {
+            const location = document.getElementById('location').value;
+            if (!location) {
+                alert('Please select a location');
+                return;
+            }
+            try {
+                const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=${apiKey}`;
+                const geoResponse = await fetch(geoUrl);
+                const geoData = await geoResponse.json();
+                if (!geoData.length) throw new Error('Location not found!');
+
+                const { lat, lon } = geoData[0];
+                updateMap(lat, lon);
+                getWeatherForecast(lat, lon);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function getWeatherForecast(lat, lon) {
+            try {
+                const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+                const response = await fetch(forecastUrl);
+                const data = await response.json();
+                if (!data.list) throw new Error('Weather data unavailable!');
+
+                let forecastHtml = '';
+                for (let i = 0; i < data.list.length; i += 8) {
+                    const day = data.list[i];
+                    const date = new Date(day.dt * 1000).toDateString();
+                    forecastHtml += `
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;">${date}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">🌡️ ${day.main.temp.toFixed(1)}°C</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">💧 ${day.main.humidity}%</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">${day.weather[0].description}</td>
+                        </tr>`;
+                }
+                document.getElementById('weather-forecast').innerHTML = forecastHtml;
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function loadMap(lat = 21.1702, lon = 72.8311) {
+            map = L.map('map').setView([lat, lon], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            L.marker([lat, lon]).addTo(map).bindPopup('📍 Default Location').openPopup();
+        }
+
+        function updateMap(lat, lon) {
+            map.setView([lat, lon], 13);
+            L.marker([lat, lon]).addTo(map).bindPopup('📍 Updated Location').openPopup();
+        }
+
+        loadMap();
+    </script>
+</body>
+
+</html>

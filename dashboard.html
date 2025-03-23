@@ -3,35 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agriculture Dashboard</title>
+    <title>Smart Agriculture Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="dashboard.js"></script>
 </head>
-<body style="font-family: 'Poppins', sans-serif; background: #f4f4f4; text-align: center;">
-
-    <nav style="display: flex; justify-content: space-between; align-items: center; background: #2d7b5f; padding: 15px 20px; color: white;">
+<body>
+    <header>
         <h1>Smart Agriculture Dashboard</h1>
-        <button onclick="logout()" style="background: red; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Logout</button>
-    </nav>
-
-    <div style="padding: 20px;">
+        <div class="user-info">
+            <span id="username">Welcome, User</span>
+            <button id="logout" class="logout-btn">Logout</button>
+        </div>
+    </header>
+    
+    <main>
         <h2>Agriculture Dashboard</h2>
 
-        <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 20px;">
-            <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); width: 200px;">
-                <h3>Temperature:</h3>
-                <p id="temperature">-- °C</p>
-            </div>
-            <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); width: 200px;">
-                <h3>Humidity:</h3>
-                <p id="humidity">-- %</p>
-            </div>
-            <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); width: 200px;">
-                <h3>Soil Moisture:</h3>
-                <p id="soil-moisture">-- %</p>
-            </div>
+        <!-- Sensor Data Cards -->
+        <div class="cards">
+            <div class="card"><h3>Temperature:</h3> <p id="temperature">-- °C</p></div>
+            <div class="card"><h3>Humidity:</h3> <p id="humidity">-- %</p></div>
+            <div class="card"><h3>Soil Moisture:</h3> <p id="soil-moisture">-- %</p></div>
         </div>
-    </div>
 
-    <script type="module" src="dashboard.js"></script>
+        <!-- Charts -->
+        <div class="charts-container">
+            <canvas id="tempChart"></canvas>
+            <canvas id="soilMoistureChart"></canvas>
+        </div>
+
+        <!-- Irrigation Schedule -->
+        <h2>Next 5 Irrigation Schedules</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Time</th>
+                    <th>Soil Moisture (%)</th>
+                    <th>Temperature (°C)</th>
+                </tr>
+            </thead>
+            <tbody id="schedule-body">
+                <tr><td colspan="4">Loading...</td></tr>
+            </tbody>
+        </table>
+
+        <!-- Motor Control -->
+        <div class="motor-control">
+            <button id="motor-on" class="motor-btn on">Turn Motor ON</button>
+            <button id="motor-off" class="motor-btn off">Turn Motor OFF</button>
+        </div>
+    </main>
 </body>
 </html>
